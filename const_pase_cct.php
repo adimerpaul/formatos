@@ -271,9 +271,11 @@ window.onload = function() {
         return false
     })
     window.jsPDF = window.jspdf.jsPDF
-    const doc = new jsPDF('p', 'mm', 'letter')
+    var doc = new jsPDF('p', 'mm', 'letter')
   function imprimirArchivo(data){
-        console.log(data)
+        //reset doc
+      doc = new jsPDF('p', 'mm', 'letter')
+      console.log(data)
       doc.rect(10, 10, 196, 115)
       const img = new Image()
       img.src = 'img/logo.jpg'
@@ -292,22 +294,22 @@ window.onload = function() {
       //linea vertical despues de horario
       doc.line(95, 30, 95, 45)
 
-      doc.ellipse(20, 40, 5, 3)
+      console.log(data.horario)
+      data.horario==='Entrada'?doc.ellipse(20, 40, 5, 3, 'F'):doc.ellipse(20, 40, 5, 3)
       text('Entrada', 26, 41)
-      doc.ellipse(45, 40, 5, 3)
+      data.horario==='Intermedio'?doc.ellipse(45, 40, 5, 3, 'F'):doc.ellipse(45, 40, 5, 3)
       text('Intermedio', 51, 41)
-      doc.ellipse(75, 40, 5, 3)
+        data.horario==='Salida'?doc.ellipse(75, 40, 5, 3, 'F'):doc.ellipse(75, 40, 5, 3)
       text('Salida', 81, 41)
 
       textCenter('Por el Asunto', 130, 35)
       doc.line(175, 30, 175, 45)
-      //3 circulos debajo de hoario con nombre de entrada intermedio salida
 
-      doc.ellipse(105, 40, 5, 3)
+      data.asunto==='Particular'?doc.ellipse(105, 40, 5, 3, 'F'): doc.ellipse(105, 40, 5, 3)
       text('Particular', 111, 41)
-      doc.ellipse(132, 40, 5, 3)
+      data.asunto==='Oficial'?doc.ellipse(132, 40, 5, 3, 'F'): doc.ellipse(132, 40, 5, 3)
       text('Oficial', 139, 41)
-      doc.ellipse(155, 40, 5, 3)
+      data.asunto==='Médico'?doc.ellipse(155, 40, 5, 3, 'F'): doc.ellipse(155, 40, 5, 3)
       text('Médico', 161, 41)
 
       textCenter('Folio', 190, 35)
@@ -318,36 +320,43 @@ window.onload = function() {
       text('México, ', 12, 50)
       underline('Ciudad de México', 35, 50)
       text('a', 80, 50)
-      underline('12', 95, 50)
+      const dia = new Date().getDate()
+      console.log(dia)
+      underline(dia+'', 95, 50)
+      console.log('de')
       text('de', 115, 50)
-      underline('Agosto', 125, 50)
+      const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+      const mes = meses[new Date().getMonth()]
+      console.log(mes)
+      underline(mes+'', 125, 50)
+      console.log('de')
       text('de', 155, 50)
-      underline('2021', 170, 50)
+      const anio = new Date().getFullYear()
+      underline(anio+'', 170, 50)
       ////////////////////////tercera parte
       textCenterMinus('Lugar y fecha', 100, 55)
       ////////////////////////cuarta parte
       text('Se hace constar que el (la) C', 12, 60)
-      underline('COIN ALMA', 60, 60)
+      underline(data.nombre+'', 60, 60)
       text('Turno', 140, 60)
-      underline('Matutino', 160, 60)
+      underline(data.turno+'', 160, 60)
       ////////////////////////quinta parte
       text('Con categoría de', 12, 65)
-      underline('Técnico en Informática', 50, 65)
+      underline(data.categoria+'', 50, 65)
       text('Matricula', 140, 65)
-      underline('123456', 160, 65)
+      underline(data.matricula+'', 160, 65)
       ////////////////////////sexta parte
       text('Permanecerá ausente del departamento de', 12, 70)
-      underline('DIRECCIÓN DE ADMINISTRACIÓN', 100, 70)
+      underline(data.adscripcion, 100, 70)
       ////////////////////////septima parte
-      //linea
       doc.line(10, 75, 206, 75)
       text('A partir de las', 12, 80)
-      underline('8:00', 50, 80)
+      underline(data.a_partir+'', 50, 80)
       text('Para ocurrir', 100, 80)
-      underline('A las 12:00', 140, 80)
+      underline(data.ocurrir+'', 140, 80)
       ////////////////////////octava parte
       text('Con objeto de', 12, 85)
-      underline('Realizar trámites', 50, 85)
+      underline(data.motivo+'', 50, 85)
       ////////////////////////novena parte
       doc.line(15, 90, 200, 90)
       doc.line(10, 95, 206, 95)
@@ -397,6 +406,7 @@ window.onload = function() {
       doc.text(x, y, text, null, null, 'center')
   }
   function underline(text,x,y) {
+        console.log(text)
       doc.setFontSize(10)
       doc.setFont('helvetica', 'normal')
       const levelCentralText = text
