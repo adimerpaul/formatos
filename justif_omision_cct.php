@@ -297,7 +297,7 @@ function contenido()
                 // /////////////////////// primera parte
 
                 textCenter('Folio', 140, 30)
-                textCenter('CC_'+data.folio, 150, 30)
+                text('CC_'+data.folio, 150, 30)
                 // // linea
                 // doc.line(10, 45, 206, 45)
                 ///////////////// segunda parte

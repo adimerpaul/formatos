@@ -388,7 +388,7 @@ window.onload = function() {
   function text(text,x,y) {
       doc.setFontSize(10)
       doc.setFont('helvetica', 'normal')
-      doc.text(x, y, text)
+      doc.text(x, y, text, {maxWidth: 190})
   }
   function textCenter(text,x,y) {
       doc.setFontSize(10)

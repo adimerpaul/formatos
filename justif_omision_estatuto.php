@@ -125,13 +125,13 @@ function contenido()
   </head>
 
   <body>
-
+<!--      <iframe id="ifmcontentstoprint" style="height: 500px; width: 100%;"></iframe>-->
 
     <p>
     <h3><b>Por favor ingresa los datos solicitados:</b></h3>
     </p>
 
-    <form class="form-horizontal" method="POST" action="guardar_Justif_Omision_Estatuto.php " enctype="multipart/form-data" autocomplete="off">
+    <form class="form-horizontal" method="POST"  enctype="multipart/form-data" autocomplete="off" id="form-justif-omision-cct">
       <form>
 
         <div class="form-group form-check">
@@ -192,7 +192,7 @@ function contenido()
         <!--------------PLUS----------------->
         <label for="motivo">Motivo de la omisión:</label>
         <input type="text" name="motivo">
-        
+
         <!--------------DOCE----------------->
         <label for="jefe_inmediato">Jefe de Servicio:</label>
         <select name="jefe_inmediato">
@@ -232,6 +232,189 @@ function contenido()
         <button type="submit">Enviar</button>
       </form>
     </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+    <script>
+        window.onload = function() {
+            window.jsPDF = window.jspdf.jsPDF
+            var doc = new jsPDF('p', 'mm', 'letter')
+            // const data1 = {
+            //     a_partir:null,
+            //     adscripcion:"CAMELOT",
+            //     asunto:null,
+            //     categoria:"COORD PROYECTO E1",
+            //     cve_ads:"09NC014000",
+            //     desc_horario:"9.00  A 17.00",
+            //     fecha_de_alta:"2024-04-10",
+            //     fecha_de_incidencia:"0000-00-00",
+            //     folio:"500013",
+            //     horario:"Entrada",
+            //     id:"60",
+            //     jefe_inmediato:"Ada Lovelace",
+            //     matricula:"123456789",
+            //     micro:"M021",
+            //     motivo:"",
+            //     nombre:"SALANDER LISBETH ",
+            //     ocurrir:null,
+            //     responsable_personal:"",
+            //     tipo_documento:"JUSTIFICACION POR OMISION DE REGISTRO",
+            //     turno:"MATUTINO",
+            // }
+            // imprimirArchivo(data1)
+            const form = document.getElementById('form-justif-omision-cct')
+            form.addEventListener('submit', function(e) {
+                e.preventDefault()
+                const formData = new FormData(form)
+                axios.post('guardar_Justif_Omision_Estatuto.php', formData)
+                    .then(response => {
+                        imprimirArchivo(response.data)
+                    })
+                    .catch(error => {
+                        console.error(error)
+                    })
+                return false
+            })
+            function imprimirArchivo(data){
+                //reset doc
+                doc = new jsPDF('p', 'mm', 'letter')
+                console.log(data)
+                doc.rect(10, 10, 196, 115)
+                const img = new Image()
+                img.src = 'img/logo.jpg'
+                doc.addImage(img, 'JPEG', 17, 12, 17, 17)
+                title('JUSTIFICACIÓN POR OMISIÓN DE REGISTRO PARA ESTATUTO DE TRABAJADORES DE CONFIANZA “A”', 160, 17)
+
+                text('DIRECCIÓN DE ADMINISTRACIÓN', 40, 15)
+                text('OODA', 67, 20)
+                underlineBold('NIVEL CENTRAL', 80, 20)
+                text('UNIDAD DE SERVICIO', 40, 25)
+                underlineBold('DIRECCIÓN JURÍDICA', 80, 25)
+
+                // /////////////////////// primera parte
+
+                textCenter('Folio', 140, 30)
+                text('CC_'+data.folio, 150, 30)
+                // // linea
+                // doc.line(10, 45, 206, 45)
+                ///////////////// segunda parte
+                text('México, ', 12, 40)
+                underline('Ciudad de México', 35, 40)
+                text('a', 80, 40)
+                const dia = new Date().getDate()
+                underline(dia+'', 95, 40)
+                text('de', 115, 40)
+                const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+                const mes = meses[new Date().getMonth()]
+                underline(mes+'', 125, 40)
+                text('de', 155, 40)
+                const anio = new Date().getFullYear()
+                underline(anio+'', 170, 40)
+                ////////////////////////tercera parte
+                textCenterMinus('Lugar y fecha', 100, 45)
+                ////////////////////////cuarta parte
+                text(' C. ', 20, 60)
+                underline(data.nombre+'', 50, 60)
+                text('Turno', 140, 60)
+                underline(data.turno+'', 160, 60)
+                ////////////////////////quinta parte
+                text('Categoria', 12, 65)
+                underline(data.categoria+'', 50, 65)
+                text('Matricula', 140, 65)
+                underline(data.matricula+'', 160, 65)
+                ////////////////////////sexta parte
+                text('Adscripción', 12, 70)
+                underline(data.adscripcion, 50, 70)
+                text('Horario', 140, 70)
+                underline(data.horario+'', 160, 70)
+                ////////////////////////septima parte
+                // doc.line(10, 75, 206, 75)
+                text('Los trabajadores registrarán personalmente su hora de entrada y salida en apego al Artículo 8, Fracción VI del Estatuto de Trabajadores de Confianza “A”, se justifica la omisión de registro', 12, 80)
+                // underline(data.a_partir+'', 50, 80)
+                const x = data.horario === 'Entrada' ? '(X)' : '( )'
+                const y = data.horario === 'Salida' ? '(X)' : '( )'
+                text(x+'Entrada '+y+' Salida correspondiente al día: '+data.fecha_de_incidencia, 118, 87)
+                // underline(data.ocurrir+'', 140, 80)
+                ////////////////////////octava parte
+                text('Motivo de la omisión:', 12, 90)
+                // underline(data.motivo+'', 50, 85)
+                ////////////////////////novena parte
+                doc.line(50, 92, 200, 92)
+                doc.line(10, 95, 206, 95)
+
+                textCenter('Solicita', 50, 100)
+                textCenter('Certifica', 110, 100)
+                textCenter('Autoriza', 170, 100)
+                doc.line(30, 115, 70, 115)
+                doc.line(90, 115, 130, 115)
+                doc.line(150, 115, 190, 115)
+                textCenter('Trabajadora/trabajador', 50, 120)
+                textCenter('Jefe del servicio', 110, 120)
+                textCenter('Jefe de la Dependencia', 170, 120)
+                ////////////////////////decima parte
+                // textMinusWithAuto('Nota: Para considerarse el pase como oficial o médico, este deberá contar con el correspondiente sello o documento anexo comprobatorio, que certifique la presencia del trabajador en la dependencia oficial de destino.', 12, 128)
+                // texto debajo de la linea de cuadrado
+                text('Clave: 1A74-009-084', 170, 133)
+                //descargar
+                doc.save('justificacion_omision_estatuto.pdf')
+                // document.getElementById('ifmcontentstoprint').src = doc.output('datauristring')
+            }
+
+            function title(text,x,y) {
+                doc.setFontSize(10)
+                doc.setFont('helvetica', 'bold')
+                doc.text(x, y, text,{maxWidth: 80, align: 'center'})
+            }
+            function subtitle(text,x,y) {
+                doc.setFontSize(10)
+                doc.setFont('helvetica', 'bold')
+                doc.text(x, y, text)
+            }
+            function text(text,x,y) {
+                doc.setFontSize(10)
+                doc.setFont('helvetica', 'normal')
+                doc.text(x, y, text, {maxWidth: 190})
+            }
+            function textCenter(text,x,y) {
+                doc.setFontSize(10)
+                doc.setFont('helvetica', 'normal')
+                doc.text(x, y, text, null, null, 'center')
+            }
+            function textCenterMinus(text,x,y) {
+                doc.setFontSize(7)
+                doc.setFont('helvetica', 'normal')
+                doc.text(x, y, text, null, null, 'center')
+            }
+            function underline(text,x,y) {
+                doc.setFontSize(10)
+                doc.setFont('helvetica', 'normal')
+                const levelCentralText = text
+                const levelCentralX = x
+                const levelCentralY = y
+                doc.text(levelCentralX, levelCentralY, levelCentralText)
+                const textWidth = doc.getTextWidth(levelCentralText)
+                doc.setLineWidth(0.2)
+                doc.line(levelCentralX, levelCentralY + 1, levelCentralX + textWidth, levelCentralY + 1)
+            }
+            function textMinusWithAuto(text,x,y) {
+                doc.setFontSize(7)
+                doc.setFont('helvetica', 'normal')
+                doc.text(x, y, text, {maxWidth: 190})
+            }
+            function underlineBold(text,x,y) {
+                doc.setFontSize(10)
+                doc.setFont('helvetica', 'bold')
+                const levelCentralText = text
+                const levelCentralX = x
+                const levelCentralY = y
+                doc.text(levelCentralX, levelCentralY, levelCentralText)
+                const textWidth = doc.getTextWidth(levelCentralText)
+                doc.setLineWidth(0.2)
+                doc.line(levelCentralX, levelCentralY + 1, levelCentralX + textWidth, levelCentralY + 1)
+            }
+        }
+    </script>
 
 
   </body>
