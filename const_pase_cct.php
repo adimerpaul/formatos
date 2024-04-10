@@ -294,7 +294,6 @@ window.onload = function() {
       //linea vertical despues de horario
       doc.line(95, 30, 95, 45)
 
-      console.log(data.horario)
       data.horario==='Entrada'?doc.ellipse(20, 40, 5, 3, 'F'):doc.ellipse(20, 40, 5, 3)
       text('Entrada', 26, 41)
       data.horario==='Intermedio'?doc.ellipse(45, 40, 5, 3, 'F'):doc.ellipse(45, 40, 5, 3)
@@ -313,7 +312,7 @@ window.onload = function() {
       text('Médico', 161, 41)
 
       textCenter('Folio', 190, 35)
-      textCenter('CC_', 190, 40)
+      textCenter('CC_'+data.folio, 190, 40)
       // linea
       doc.line(10, 45, 206, 45)
       ///////////////// segunda parte
@@ -321,15 +320,11 @@ window.onload = function() {
       underline('Ciudad de México', 35, 50)
       text('a', 80, 50)
       const dia = new Date().getDate()
-      console.log(dia)
       underline(dia+'', 95, 50)
-      console.log('de')
       text('de', 115, 50)
       const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
       const mes = meses[new Date().getMonth()]
-      console.log(mes)
       underline(mes+'', 125, 50)
-      console.log('de')
       text('de', 155, 50)
       const anio = new Date().getFullYear()
       underline(anio+'', 170, 50)
@@ -406,7 +401,7 @@ window.onload = function() {
       doc.text(x, y, text, null, null, 'center')
   }
   function underline(text,x,y) {
-        console.log(text)
+
       doc.setFontSize(10)
       doc.setFont('helvetica', 'normal')
       const levelCentralText = text

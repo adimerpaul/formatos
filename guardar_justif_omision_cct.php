@@ -61,7 +61,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $id_registro = mysqli_insert_id($conexion);
 
         // Redireccionar al formulario de impresión con el ID del registro recién insertado
-        header("Location: form_justificacion_omision_cct.php?id_registro=" . $id_registro);
+//        header("Location: form_justificacion_omision_cct.php?id_registro=" . $id_registro);
+        $sql = "SELECT * FROM datos_incidencia WHERE id=$id_registro";
+        $resultado = mysqli_query($conexion, $sql);
+        $row = mysqli_fetch_array($resultado);
+        echo json_encode($row);
         exit;
     }
 }

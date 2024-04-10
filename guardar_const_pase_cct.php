@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Redireccionar al formulario de impresión con el ID del registro recién insertado
 //        header("Location: form_constancia_pase_cct.php?id_registro=" . $id_registro);
-        //consular para tener el datoç
+        //consular para tener el dato
         $sql="SELECT * FROM datos_incidencia WHERE id=$id_registro";
         $resultado=mysqli_query($conexion,$sql);
         $row=mysqli_fetch_array($resultado);
