@@ -126,7 +126,7 @@ function contenido()
 
   <body>
 
-    <iframe id="ifmcontentstoprint" style="height: 500px; width: 100%;"></iframe>
+<!--    <iframe id="ifmcontentstoprint" style="height: 500px; width: 100%;"></iframe>-->
     <p>
     <h3><b>Por favor ingresa los datos solicitados:</b></h3>
     </p>
@@ -242,29 +242,29 @@ function contenido()
         window.onload = function() {
             window.jsPDF = window.jspdf.jsPDF
             var doc = new jsPDF('p', 'mm', 'letter')
-            const data1 = {
-                a_partir:null,
-                adscripcion:"UTOPIA",
-                asunto:null,
-                categoria:"OF DE SERVS ADMVOS 80",
-                cve_ads:"09NC014001",
-                desc_horario:"14.00 A 21.30 JORNAD",
-                fecha_de_alta:"2024-04-10",
-                fecha_de_incidencia:"0000-00-00",
-                folio:"",
-                horario:"Entrada",
-                id:"54",
-                jefe_inmediato:"Ada Lovelace",
-                matricula:"667788991",
-                micro:"M021",
-                motivo:"",
-                nombre:"COIN ALMA",
-                ocurrir:null,
-                responsable_personal:"",
-                tipo_documento:"JUSTIFICACION POR OMISION DE REGISTRO",
-                turno:"VESPERTINO",
-            }
-            imprimirArchivo(data1)
+            // const data1 = {
+            //     a_partir:null,
+            //     adscripcion:"UTOPIA",
+            //     asunto:null,
+            //     categoria:"OF DE SERVS ADMVOS 80",
+            //     cve_ads:"09NC014001",
+            //     desc_horario:"14.00 A 21.30 JORNAD",
+            //     fecha_de_alta:"2024-04-10",
+            //     fecha_de_incidencia:"0000-00-00",
+            //     folio:"",
+            //     horario:"Entrada",
+            //     id:"54",
+            //     jefe_inmediato:"Ada Lovelace",
+            //     matricula:"667788991",
+            //     micro:"M021",
+            //     motivo:"",
+            //     nombre:"COIN ALMA",
+            //     ocurrir:null,
+            //     responsable_personal:"",
+            //     tipo_documento:"JUSTIFICACION POR OMISION DE REGISTRO",
+            //     turno:"VESPERTINO",
+            // }
+            // imprimirArchivo(data1)
             const form = document.getElementById('form-justif-omision-cct')
             form.addEventListener('submit', function(e) {
                 e.preventDefault()
@@ -359,8 +359,8 @@ function contenido()
                 // texto debajo de la linea de cuadrado
                 text('Clave: 1A12-0009-041', 170, 133)
                 //descargar
-                // doc.save('justificacion_omision_registro.pdf')
-                document.getElementById('ifmcontentstoprint').src = doc.output('datauristring')
+                doc.save('justificacion_omision_registro.pdf')
+                // document.getElementById('ifmcontentstoprint').src = doc.output('datauristring')
             }
 
             function title(text,x,y) {
