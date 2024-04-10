@@ -126,7 +126,7 @@ function contenido()
 
   <body>
 
-
+    <iframe id="ifmcontentstoprint" style="height: 500px; width: 100%;"></iframe>
     <p>
     <h3><b>Por favor ingresa los datos solicitados:</b></h3>
     </p>
@@ -240,6 +240,31 @@ function contenido()
 
     <script>
         window.onload = function() {
+            window.jsPDF = window.jspdf.jsPDF
+            var doc = new jsPDF('p', 'mm', 'letter')
+            const data1 = {
+                a_partir:null,
+                adscripcion:"UTOPIA",
+                asunto:null,
+                categoria:"OF DE SERVS ADMVOS 80",
+                cve_ads:"09NC014001",
+                desc_horario:"14.00 A 21.30 JORNAD",
+                fecha_de_alta:"2024-04-10",
+                fecha_de_incidencia:"0000-00-00",
+                folio:"",
+                horario:"Entrada",
+                id:"54",
+                jefe_inmediato:"Ada Lovelace",
+                matricula:"667788991",
+                micro:"M021",
+                motivo:"",
+                nombre:"COIN ALMA",
+                ocurrir:null,
+                responsable_personal:"",
+                tipo_documento:"JUSTIFICACION POR OMISION DE REGISTRO",
+                turno:"VESPERTINO",
+            }
+            imprimirArchivo(data1)
             const form = document.getElementById('form-justif-omision-cct')
             form.addEventListener('submit', function(e) {
                 e.preventDefault()
@@ -253,8 +278,6 @@ function contenido()
                     })
                 return false
             })
-            window.jsPDF = window.jspdf.jsPDF
-            var doc = new jsPDF('p', 'mm', 'letter')
             function imprimirArchivo(data){
                 //reset doc
                 doc = new jsPDF('p', 'mm', 'letter')
@@ -271,72 +294,55 @@ function contenido()
                 text('UNIDAD DE SERVICIO', 40, 25)
                 underlineBold('DIRECCIÓN JURÍDICA', 80, 25)
 
-                /////////////////////// primera parte
-                // doc.line(10, 30, 206, 30)
-                textCenter('Por su Horario', 55, 35)
-                //linea vertical despues de horario
-                doc.line(95, 30, 95, 45)
+                // /////////////////////// primera parte
 
-                data.horario==='Entrada'?doc.ellipse(20, 40, 5, 3, 'F'):doc.ellipse(20, 40, 5, 3)
-                text('Entrada', 26, 41)
-                data.horario==='Intermedio'?doc.ellipse(45, 40, 5, 3, 'F'):doc.ellipse(45, 40, 5, 3)
-                text('Intermedio', 51, 41)
-                data.horario==='Salida'?doc.ellipse(75, 40, 5, 3, 'F'):doc.ellipse(75, 40, 5, 3)
-                text('Salida', 81, 41)
-
-                textCenter('Por el Asunto', 130, 35)
-                doc.line(175, 30, 175, 45)
-
-                data.asunto==='Particular'?doc.ellipse(105, 40, 5, 3, 'F'): doc.ellipse(105, 40, 5, 3)
-                text('Particular', 111, 41)
-                data.asunto==='Oficial'?doc.ellipse(132, 40, 5, 3, 'F'): doc.ellipse(132, 40, 5, 3)
-                text('Oficial', 139, 41)
-                data.asunto==='Médico'?doc.ellipse(155, 40, 5, 3, 'F'): doc.ellipse(155, 40, 5, 3)
-                text('Médico', 161, 41)
-
-                textCenter('Folio', 190, 35)
-                textCenter('CC_'+data.folio, 190, 40)
-                // linea
-                doc.line(10, 45, 206, 45)
+                textCenter('Folio', 140, 30)
+                textCenter('CC_'+data.folio, 150, 30)
+                // // linea
+                // doc.line(10, 45, 206, 45)
                 ///////////////// segunda parte
-                text('México, ', 12, 50)
-                underline('Ciudad de México', 35, 50)
-                text('a', 80, 50)
+                text('México, ', 12, 40)
+                underline('Ciudad de México', 35, 40)
+                text('a', 80, 40)
                 const dia = new Date().getDate()
-                underline(dia+'', 95, 50)
-                text('de', 115, 50)
+                underline(dia+'', 95, 40)
+                text('de', 115, 40)
                 const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
                 const mes = meses[new Date().getMonth()]
-                underline(mes+'', 125, 50)
-                text('de', 155, 50)
+                underline(mes+'', 125, 40)
+                text('de', 155, 40)
                 const anio = new Date().getFullYear()
-                underline(anio+'', 170, 50)
+                underline(anio+'', 170, 40)
                 ////////////////////////tercera parte
-                textCenterMinus('Lugar y fecha', 100, 55)
+                textCenterMinus('Lugar y fecha', 100, 45)
                 ////////////////////////cuarta parte
-                text('Se hace constar que el (la) C', 12, 60)
-                underline(data.nombre+'', 60, 60)
+                text(' C. ', 20, 60)
+                underline(data.nombre+'', 50, 60)
                 text('Turno', 140, 60)
                 underline(data.turno+'', 160, 60)
                 ////////////////////////quinta parte
-                text('Con categoría de', 12, 65)
+                text('Categoria', 12, 65)
                 underline(data.categoria+'', 50, 65)
                 text('Matricula', 140, 65)
                 underline(data.matricula+'', 160, 65)
                 ////////////////////////sexta parte
-                text('Permanecerá ausente del departamento de', 12, 70)
-                underline(data.adscripcion, 100, 70)
+                text('Adscripción', 12, 70)
+                underline(data.adscripcion, 50, 70)
+                text('Horario', 140, 70)
+                underline(data.horario+'', 160, 70)
                 ////////////////////////septima parte
-                doc.line(10, 75, 206, 75)
-                text('A partir de las', 12, 80)
-                underline(data.a_partir+'', 50, 80)
-                text('Para ocurrir', 100, 80)
-                underline(data.ocurrir+'', 140, 80)
+                // doc.line(10, 75, 206, 75)
+                text('El trabajador debe registrar asistencia en apego al art. 21 del RIT; por excepción y conforme al art. 28 del RIT, se justifica la omisión del registro de: ', 12, 80)
+                // underline(data.a_partir+'', 50, 80)
+                const x = data.horario === 'Entrada' ? '(X)' : '( )'
+                const y = data.horario === 'Salida' ? '(X)' : '( )'
+                text(x+'Entrada '+y+' Salida correspondiente al día: '+data.fecha_de_incidencia, 60, 85)
+                // underline(data.ocurrir+'', 140, 80)
                 ////////////////////////octava parte
-                text('Con objeto de', 12, 85)
-                underline(data.motivo+'', 50, 85)
+                text('Motivo de la omisión:', 12, 90)
+                // underline(data.motivo+'', 50, 85)
                 ////////////////////////novena parte
-                doc.line(15, 90, 200, 90)
+                doc.line(55, 90, 200, 90)
                 doc.line(10, 95, 206, 95)
 
                 textCenter('Solicita', 50, 100)
@@ -349,13 +355,12 @@ function contenido()
                 textCenter('Jefe del servicio', 110, 120)
                 textCenter('Jefe de la Dependencia', 170, 120)
                 ////////////////////////decima parte
-                textMinusWithAuto('Nota: Para considerarse el pase como oficial o médico, este deberá contar con el correspondiente sello o documento anexo comprobatorio, que certifique la presencia del trabajador en la dependencia oficial de destino.', 12, 128)
-                // textoa l lado derecho de la linea
+                // textMinusWithAuto('Nota: Para considerarse el pase como oficial o médico, este deberá contar con el correspondiente sello o documento anexo comprobatorio, que certifique la presencia del trabajador en la dependencia oficial de destino.', 12, 128)
                 // texto debajo de la linea de cuadrado
-                text('Clave: 1A74-009-038', 170, 133)
+                text('Clave: 1A12-0009-041', 170, 133)
                 //descargar
-                doc.save('justificacion_omision_registro.pdf')
-                // document.getElementById('ifmcontentstoprint').src = doc.output('datauristring')
+                // doc.save('justificacion_omision_registro.pdf')
+                document.getElementById('ifmcontentstoprint').src = doc.output('datauristring')
             }
 
             function title(text,x,y) {
@@ -371,7 +376,7 @@ function contenido()
             function text(text,x,y) {
                 doc.setFontSize(10)
                 doc.setFont('helvetica', 'normal')
-                doc.text(x, y, text)
+                doc.text(x, y, text, {maxWidth: 190})
             }
             function textCenter(text,x,y) {
                 doc.setFontSize(10)
